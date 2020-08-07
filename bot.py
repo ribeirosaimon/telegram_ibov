@@ -1,6 +1,6 @@
 from telegram.ext import Updater, CommandHandler
 from handlers import *
-from config import KEY
+from token_api import KEY
 
 
 def main():
