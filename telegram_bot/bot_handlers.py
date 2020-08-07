@@ -1,5 +1,5 @@
 from api_crud_carteira.carteira import *
-
+from telegram.replykeyboardmarkup import ReplyKeyboardMarkup
 
 def start(update, context):
     """Send a message when the command /start is issued."""
@@ -16,13 +16,25 @@ def echo(update, context):
     update.message.reply_text(update.message.text)
 
 
-def adicionar_acao(update, context):
-    api_get = pegar_informacao()
-    update.message.reply_text(f"Sua acao é {api_get['acao']} e seu preço Medio é de {api_get['preco_medio']}")
+def welcome(update, context):
+    kbd_layout = [
+        ['📥Adicionar Ação'],
+        ['📤Deletar Ação'],
+        ['📈Minha carteira']
+    ]
 
-def informacoes_das_acoes(update,context):
-    api_crud = pegar_informacao()
-    print(api_crud['acao'])
-    api_get = informacoes_acao(api_crud['acao'])
-    update.message.reply_text(f"Sua acao esta indicando: {api_get[0]} pela HiLo")
-    update.message.reply_text(f"E o RSI esta em {api_get[1]}%")
+    kbd = ReplyKeyboardMarkup(kbd_layout)
+    update.message.reply_text(text='Olá, ' + update.message.from_user.first_name +'!', reply_markup=kbd)
+    id_usuario = update['message']['chat']['id']
+
+
+
+def add_acao(update, context):
+   update.message.reply_text("Função de deposito")
+
+
+def del_acao(update, context):
+   update.message.reply_text("Função de retirada")
+
+def minha_carteira(update, context):
+   update.message.reply_text("Função de pagamentos")
