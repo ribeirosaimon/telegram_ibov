@@ -4,10 +4,16 @@ import json
 url_base = 'http://localhost:5000'
 carteira = url_base + '/carteira/0'
 
+api_rest = 'https://secure-wildwood-34847.herokuapp.com/'
 
-acao={
-'acao':'movi3',
-'preco_medio':15.80
-}
+def pegar_informacao():
+    resposta_get = requests.get(carteira)
+    return resposta_get.json()
 
-print(url_base+carteira)
+
+def informacoes_acao(acao):
+    retorno = api_rest+str(acao)
+    resposta = requests.get(retorno).json()
+    call_hilo = resposta[f'{acao}']['technical_analysis']['call_hilo']
+    rsi = resposta[f'{acao}']['technical_analysis']['rsi']
+    return call_hilo, rsi
