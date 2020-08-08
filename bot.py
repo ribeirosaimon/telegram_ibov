@@ -2,6 +2,8 @@ import logging
 from token_api import KEY
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
 from telegram_bot.bot_handlers import *
+from telegram_bot.bot_handlers_del import *
+from telegram_bot.bot_handlers_carteira import *
 from telegram import bot
 
 # Enable logging
@@ -17,40 +19,33 @@ def main():
     updater = Updater(KEY, use_context=True)
     dp = updater.dispatcher
     updater.dispatcher.add_handler(CommandHandler('start', welcome))
-    updater.dispatcher.add_handler(MessageHandler(Filters.regex(r"📤Deletar Açao"), del_acao))
-    updater.dispatcher.add_handler(MessageHandler(Filters.regex(r"📈Minha Carteira"), minha_carteira))
+    updater.dispatcher.add_handler(MessageHandler(Filters.regex('Carteira'), minha_carteira))
 
-
-
-    # conversation 1
-    conv_handler = ConversationHandler(
+    # Add ação
+    conv_handler_add = ConversationHandler(
         entry_points=[CommandHandler('Adicionar', start)],
-
         states={
             STAGE1: [MessageHandler(Filters.text, stage1)],
-
             STAGE2: [MessageHandler(Filters.text, stage2)],
-
             ConversationHandler.TIMEOUT: [MessageHandler(Filters.text | Filters.command, timeout)],
         },
+        fallbacks=[CommandHandler('Cancel', cancel),],
+        conversation_timeout=CHAT_TIMEOUT
+    )
+    dp.add_handler(conv_handler_add)
 
+
+    # Remover ação
+    conv_handler_del = ConversationHandler(
+        entry_points=[CommandHandler('Deletar', start_del)],
+        states={
+            STAGE1_DEL: [MessageHandler(Filters.text, stage1_del)],
+            ConversationHandler.TIMEOUT: [MessageHandler(Filters.text | Filters.command, timeout)],
+        },
         fallbacks=[CommandHandler('cancel', cancel),],
         conversation_timeout=CHAT_TIMEOUT
     )
-    dp.add_handler(conv_handler)
-
-
-
-
-
-
-
-
-
-
-
-
-
+    dp.add_handler(conv_handler_del)
 
     dp = updater.dispatcher
     #dp.add_handler(CommandHandler("start", start))

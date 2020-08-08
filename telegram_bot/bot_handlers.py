@@ -33,7 +33,7 @@ def remider(update,context):
         else:
             break
     if thread_state:
-        update.message.reply_text('only 30 seconds left. Please Hurry!')
+        update.message.reply_text('Ja se passaram 30 segundos...')
 
 
 def welcome(update, context):
@@ -61,8 +61,6 @@ def add_acao(update, context):
 def del_acao(update, context):
    update.message.reply_text("Função de retirada")
 
-def minha_carteira(update, context):
-   update.message.reply_text("Função de pagamentos")
 
 
 def start(update, context):
