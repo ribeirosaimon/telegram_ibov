@@ -1,6 +1,6 @@
 import logging
 from token_api import KEY
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
 from telegram_bot.bot_handlers import *
 from telegram import bot
 
@@ -13,12 +13,44 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    updater = Updater(KEY, use_context=True)
 
+    updater = Updater(KEY, use_context=True)
+    dp = updater.dispatcher
     updater.dispatcher.add_handler(CommandHandler('start', welcome))
-    updater.dispatcher.add_handler(MessageHandler(Filters.regex(r"📥Adicionar Ação"), add_acao))
     updater.dispatcher.add_handler(MessageHandler(Filters.regex(r"📤Deletar Açao"), del_acao))
     updater.dispatcher.add_handler(MessageHandler(Filters.regex(r"📈Minha Carteira"), minha_carteira))
+
+
+
+    # conversation 1
+    conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('Adicionar', start)],
+
+        states={
+            STAGE1: [MessageHandler(Filters.text, stage1)],
+
+            STAGE2: [MessageHandler(Filters.text, stage2)],
+
+            ConversationHandler.TIMEOUT: [MessageHandler(Filters.text | Filters.command, timeout)],
+        },
+
+        fallbacks=[CommandHandler('cancel', cancel),],
+        conversation_timeout=CHAT_TIMEOUT
+    )
+    dp.add_handler(conv_handler)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     dp = updater.dispatcher
     #dp.add_handler(CommandHandler("start", start))
