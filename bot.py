@@ -4,6 +4,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Conve
 from telegram_bot.bot_handlers import *
 from telegram_bot.bot_handlers_del import *
 from telegram_bot.bot_handlers_carteira import *
+from telegram_bot.bot_handlers_schedule import *
 from telegram import bot
 
 # Enable logging
@@ -12,16 +13,9 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 
-
-
 def main():
-
     updater = Updater(KEY, use_context=True)
     dp = updater.dispatcher
-    job = updater.job_queue
-
-    job.run_repeating(scheduler, interval=30, first=0)
-
     updater.dispatcher.add_handler(CommandHandler('start', welcome))
     updater.dispatcher.add_handler(MessageHandler(Filters.regex('Carteira'), minha_carteira))
     conv_handler_add = ConversationHandler(
@@ -46,7 +40,7 @@ def main():
         conversation_timeout=CHAT_TIMEOUT
     )
     dp.add_handler(conv_handler_del)
-    dp = updater.dispatcher
+    dp.add_handler(CommandHandler("acompanhe",acompanhe, pass_job_queue=True))
     dp.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
     updater.start_polling()
     updater.idle()

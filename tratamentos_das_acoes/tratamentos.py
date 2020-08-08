@@ -1,12 +1,8 @@
 
-from telegram_bot.token_api import CHAT_ID
 #busca a informação e faz o tratamento
+from api_crud_carteira.carteira import pesquisar_carteira
 
-def tratamentos(acao_json):
-    analise_fundamentalista=acao_json['fundamentalist_analysis']
-    fechamento = analise_fundamentalista['adj_close']
-    print(fechamento)
+def tratamentos(acao, id_usuario):
+    [x[0] for x in pesquisar_carteira(id_usuario)]
 
-
-def scheduler(context):
-    context.bot.send_message(CHAT_ID, 'testando pra ver se da tudo certo')
+    info_aca = buscar_json_da_acao(acao)

@@ -1,5 +1,4 @@
 from api_crud_carteira.carteira import pesquisar_carteira
-
 from telegram_bot.sites_info import *
 import telegram.ext
 
