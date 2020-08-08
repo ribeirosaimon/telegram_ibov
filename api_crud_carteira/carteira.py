@@ -37,7 +37,6 @@ def pesquisar_carteira(id_usuario):
     endpoint = info_carteira + str(id_usuario)
     resposta = requests.request('GET', endpoint)
     carteira_json = resposta.json()
-    print(carteira_json)
     carteira_json = carteira_json['carteira']
     for index in carteira_json:
         carteira_acao = []

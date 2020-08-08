@@ -7,4 +7,4 @@ id_usuario = 883934505
 acao = 'movi3'
 
 
-pesquisar_carteira(id_usuario)
+tratamentos(id_usuario)
