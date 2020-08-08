@@ -5,6 +5,7 @@ from datetime import datetime
 
 url_base = 'http://localhost:5000'
 criar_acao = url_base + '/carteira/'
+del_acao = url_base +'/usuario/'
 
 
 def adicionar_acao(id_usuario, acao, preco_medio):
@@ -19,4 +20,4 @@ def adicionar_acao(id_usuario, acao, preco_medio):
 
 
 def deletar_acao(acao, id_usuario):
-    pass
+    endpoint = del_acao + id_usuario
