@@ -13,6 +13,11 @@ def acompanhe(update, context):
 
 def callback_minute(context):
     chat_id=context.job.context
-    tratamentos(chat_id)
-    context.bot.send_message(chat_id=chat_id,
-                             text="Hi User, Add Fund to your account to start trading")
+    carteira_acao = pesquisar_carteira(chat_id)
+    for acao in carteira_acao:
+        nome_acao_da_carteira = acao[0]
+        preco_acao_da_carteira = acao[1]
+        api_rest=buscar_json_da_acao(nome_acao_da_carteira)
+        if preco_acao_da_carteira <= api_rest['fundamentalist_analysis']['adj_close']:
+            context.bot.send_message(chat_id=chat_id,
+                                     text=f"Sua Ação {nome_acao_da_carteira} está com o preço maior que o indicado")

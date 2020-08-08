@@ -1,6 +1,6 @@
 from api_crud_carteira.carteira import *
 from api_crud_carteira.criar_carteira_db import *
-from telegram_bot.buscar_info import *
+from api_cotacao_bolsa.pegando_cotacao import *
 from tratamentos_das_acoes.tratamentos import *
 
 id_usuario = 883934505
