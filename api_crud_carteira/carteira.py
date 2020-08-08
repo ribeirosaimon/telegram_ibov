@@ -37,10 +37,12 @@ def pesquisar_carteira(id_usuario):
     endpoint = info_carteira + str(id_usuario)
     resposta = requests.request('GET', endpoint)
     carteira_json = resposta.json()
-    carteira_json['carteira'][0]
-
-    for index in range(len(carteira_json['carteira'])):
-        acao = carteira_json['carteira'][index]['acao']
-        preco = carteira_json['carteira'][index]['preco_medio']
-        lista_retorno.append(f'Ação: {acao}     Preço Alerta: {preco}')
+    carteira_json = carteira_json['carteira']
+    for index in carteira_json:
+        carteira_acao = []
+        acao = index['acao']
+        preco = index['preco_medio']
+        carteira_acao.append(acao)
+        carteira_acao.append(preco)
+        lista_retorno.append(carteira_acao)
     return lista_retorno

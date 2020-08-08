@@ -18,10 +18,12 @@ def main():
 
     updater = Updater(KEY, use_context=True)
     dp = updater.dispatcher
+    job = updater.job_queue
+
+    job.run_repeating(scheduler, interval=30, first=0)
+
     updater.dispatcher.add_handler(CommandHandler('start', welcome))
     updater.dispatcher.add_handler(MessageHandler(Filters.regex('Carteira'), minha_carteira))
-
-    # Add ação
     conv_handler_add = ConversationHandler(
         entry_points=[CommandHandler('Adicionar', start)],
         states={
@@ -33,8 +35,6 @@ def main():
         conversation_timeout=CHAT_TIMEOUT
     )
     dp.add_handler(conv_handler_add)
-
-
     # Remover ação
     conv_handler_del = ConversationHandler(
         entry_points=[CommandHandler('Deletar', start_del)],
@@ -42,19 +42,15 @@ def main():
             STAGE1_DEL: [MessageHandler(Filters.text, stage1_del)],
             ConversationHandler.TIMEOUT: [MessageHandler(Filters.text | Filters.command, timeout)],
         },
-        fallbacks=[CommandHandler('cancel', cancel),],
+        fallbacks=[CommandHandler('Cancel', cancel),],
         conversation_timeout=CHAT_TIMEOUT
     )
     dp.add_handler(conv_handler_del)
-
     dp = updater.dispatcher
-    #dp.add_handler(CommandHandler("start", start))
     dp.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
-
     updater.start_polling()
     updater.idle()
 
 
 if __name__ == '__main__':
     main()
-    print('passou aqui?')
