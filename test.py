@@ -7,5 +7,4 @@ id_usuario = 883934505
 acao = 'movi3'
 
 
-json_acao = buscar_json_da_acao(acao)
-print(json_acao)
+pesquisar_carteira(id_usuario)
