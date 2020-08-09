@@ -14,4 +14,9 @@ def tratamentos(context):
         api_rest=buscar_json_da_acao(nome_acao_da_carteira)
         if preco_acao_da_carteira <= api_rest['fundamentalist_analysis']['adj_close']:
             resposta = f"Sua Ação {nome_acao_da_carteira} está com o preço maior que o indicado"
+            print(resposta)
+            lista_de_mensagens.append(resposta)
+        if api_rest['fundamentalist_analysis']['adj_close'] >= api_rest['fundamentalist_analysis']['high']:
+            resposta = f'Sua Ação {nome_acao_da_carteira} está na máxima do dia'
+            print(resposta)
             lista_de_mensagens.append(resposta)
