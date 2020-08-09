@@ -15,22 +15,23 @@ def tratamentos(chat_id):
         nome_acao_da_carteira = acao[0].upper()
         preco_acao_da_carteira = acao[1]
         api_rest=buscar_json_da_acao(nome_acao_da_carteira)
+        preco_atual = api_rest['fundamentalist_analysis']['adj_close']
 
-        if preco_acao_da_carteira <= api_rest['fundamentalist_analysis']['adj_close']:
+        if preco_acao_da_carteira <= preco_atual:
             codigo = f'{nome_acao_da_carteira}_adj_close'
             if codigo not in lista_de_mensagens:
                 print(f"Sua Ação {nome_acao_da_carteira} está com o preço maior que o indicado")
                 lista_de_mensagens.append(codigo)
 
 
-        if api_rest['fundamentalist_analysis']['adj_close'] >= api_rest['fundamentalist_analysis']['high']:
+        if preco_atual >= api_rest['fundamentalist_analysis']['high']:
             codigo = f'{nome_acao_da_carteira}_high'
             if codigo not in lista_de_mensagens:
                 print(f'Sua Ação {nome_acao_da_carteira} está na máxima do dia')
                 lista_de_mensagens.append(codigo)
 
 
-        if api_rest['fundamentalist_analysis']['adj_close'] <= api_rest['fundamentalist_analysis']['low']:
+        if preco_atual <= api_rest['fundamentalist_analysis']['low']:
             codigo = f'{nome_acao_da_carteira}_low'
             if codigo not in lista_de_mensagens:
                 print(f'Sua Ação {nome_acao_da_carteira} está na mínima do dia')
@@ -70,10 +71,10 @@ def tratamentos(chat_id):
                 lista_de_mensagens.append(codigo)
 
 
-        if api_rest['technical_analysis']['mov_avg'] >= api_rest['fundamentalist_analysis']['adj_close']:
+        if api_rest['technical_analysis']['mov_avg'] >= preco_atual:
             codigo = f'{nome_acao_da_carteira}_mov_avg'
             if codigo not in lista_de_mensagens:
-                print(f'Sua Ação {nome_acao_da_carteira} com o a diferença de {preco}% do ultimo {referencia}')
+                print(f'Sua Ação {nome_acao_da_carteira} está no mesmo valor que a MMA de 14 periodos, cotada agora à{}')
                 lista_de_mensagens.append(codigo)
 
 

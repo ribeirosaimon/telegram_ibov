@@ -10,4 +10,3 @@ acao = 'movi3'
 
 while True:
     tratamentos(id_usuario)
-    time.sleep(10)
