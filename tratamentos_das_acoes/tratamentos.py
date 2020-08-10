@@ -7,7 +7,7 @@ import time
 #[nome_acao, adj_close, high, low, avg_vol, vol, mov_avg, rsi]
 
 ultima_referencia = ['',]
-lista_de_mensagens = ['',]
+lista_de_mensagens = []
 
 
 def envio_de_mensagem(texto, codigo):
