@@ -6,7 +6,6 @@ from tratamentos_das_acoes.tratamento_hora_do_dia import *
 import time
 
 
-
 id_usuario = 883934505
 acao = 'movi3'
 
