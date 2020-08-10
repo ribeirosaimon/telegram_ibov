@@ -7,8 +7,8 @@ import time
 #[nome_acao, adj_close, high, low, avg_vol, vol, mov_avg, rsi]
 
 ultima_referencia = ['',]
-lista_de_mensagens = ['',]
-minutos_atuais = int(datetime.now().strftime('%H%M'))
+lista_de_mensagens = [[],]
+minutos_atuais = int(datetime.now().strftime('%H'))
 
 
 
@@ -26,7 +26,7 @@ def tratamentos(chat_id):
             codigo = f'{nome_acao_da_carteira}_adj_close'
             if codigo not in lista_de_mensagens:
                 print(f"Sua Ação {nome_acao_da_carteira} está com o preço maior que o indicado")
-                lista_de_mensagens.append(codigo)
+                lista_de_mensagens.append([codigo,minutos_atuais])
 
 
         if preco_atual >= api_rest['fundamentalist_analysis']['high']:
@@ -84,5 +84,8 @@ def tratamentos(chat_id):
                 lista_de_mensagens.append(codigo)
 
 
+        for mensagem in lista_de_mensagens:
+            if mensagem[1] < minutos_atuais:
+                del(mensagem)
 
     # Conferencia se os preços estão passando em todos os indicadores, e se o codigo[:10] está funcionando
