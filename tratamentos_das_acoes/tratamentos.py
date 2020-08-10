@@ -39,9 +39,6 @@ def tratamentos(chat_id):
             codigo = f'{nome_acao_da_carteira}_high{minutos_atuais}'
             envio_de_mensagem(f'Sua Ação {nome_acao_da_carteira} está na máxima do dia', codigo)
 
-    print(f'{nome_acao_da_carteira} passou ---->', lista_de_mensagens)
-
-'''
         if preco_atual <= api_rest['fundamentalist_analysis']['low']:
             codigo = f'{nome_acao_da_carteira}_low'
             envio_de_mensagem(f'Sua Ação {nome_acao_da_carteira} está na mínima do dia', codigo)
@@ -76,7 +73,7 @@ def tratamentos(chat_id):
             ultima_referencia.append(indicador_hilo)
             envio_de_mensagem(f'O indicador HiLo da sua Ação {nome_acao_da_carteira} está indicando {indicador_hilo}', codigo)
 
-'''
+
 
 
 
