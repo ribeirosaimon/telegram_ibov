@@ -6,17 +6,24 @@ from tratamentos_das_acoes.tratamento_hora_do_dia import *
 import time
 #[nome_acao, adj_close, high, low, avg_vol, vol, mov_avg, rsi]
 
-ultima_referencia = ['',]
+ultima_referencia = []
 lista_de_mensagens = []
 
 
 def envio_de_mensagem(texto, codigo):
-        if codigo not in lista_de_mensagens:
-            lista_de_mensagens.append(codigo)
-        time.sleep(2)
+    if not [item[:9] for item in lista_de_mensagens if item.startswith(codigo[:9])]:
+        lista_de_mensagens.append(codigo)
         print(texto)
 
-
+    '''
+    for valor in lista_de_mensagens:
+        if codigo[:9] in valor[:9]:
+            break
+    else:
+        lista_de_mensagens.append(codigo)
+        print(texto)
+    time.sleep(2)
+    '''
 
 
 def tratamentos(chat_id):
@@ -28,10 +35,10 @@ def tratamentos(chat_id):
         preco_acao_da_carteira = acao[1]
         api_rest=buscar_json_da_acao(nome_acao_da_carteira)
         preco_atual = api_rest['fundamentalist_analysis']['adj_close']
+        ultima_referencia.append(api_rest['technical_analysis']['call_hilo'])
 
         if preco_acao_da_carteira <= preco_atual:
             codigo = f'{nome_acao_da_carteira}_adj_close{minutos_atuais}'
-            print(f'{nome_acao_da_carteira} passou ---->', codigo)
             envio_de_mensagem(f"Sua Ação {nome_acao_da_carteira} está com o preço maior que o indicado", codigo)
 
 
@@ -45,12 +52,12 @@ def tratamentos(chat_id):
 
 
         if api_rest['fundamentalist_analysis']['avg_vol'] / 7 < api_rest['fundamentalist_analysis']['vol'] / horas_pasadas_do_dia(datetime.now().strftime('%H')):
-            codigo = f'{nome_acao_da_carteira}_vol'
+            codigo = f'{nome_acao_da_carteira}_vol{minutos_atuais}'
             envio_de_mensagem(f'O volume de sua ação {nome_acao_da_carteira} está acima do projetado', codigo)
 
 
         if api_rest['technical_analysis']['mov_avg'] >= preco_atual:
-            codigo = f'{nome_acao_da_carteira}_mov_avg'
+            codigo = f'{nome_acao_da_carteira}_mov_avg{minutos_atuais}'
             envio_de_mensagem(f'Sua Ação {nome_acao_da_carteira} está no mesmo valor que a MMA de 14 periodos, cotada agora à {preco_atual}', codigo)
 
         if api_rest['technical_analysis']['%_last_reference'] >= 5:
@@ -60,11 +67,11 @@ def tratamentos(chat_id):
                 referencia = 'Topo'
             if referencia == 'bottom':
                 referencia = 'Fundo'
-            codigo = f'{nome_acao_da_carteira}_%_last_reference'
+            codigo = f'{nome_acao_da_carteira}_%_last_reference{minutos_atuais}'
             envio_de_mensagem(f'Sua Ação {nome_acao_da_carteira} com o a diferença de {preco}% do ultimo {referencia}', codigo)
 
         if api_rest['technical_analysis']['call_hilo'] != ultima_referencia[-1]:
-            codigo = f'{nome_acao_da_carteira}_hilo'
+            codigo = f'{nome_acao_da_carteira}_hilo{minutos_atuais}'
             indicador_hilo = api_rest['technical_analysis']['call_hilo']
             if indicador_hilo == 'buy':
                 indicador_hilo = 'Compra'
@@ -73,7 +80,7 @@ def tratamentos(chat_id):
             ultima_referencia.append(indicador_hilo)
             envio_de_mensagem(f'O indicador HiLo da sua Ação {nome_acao_da_carteira} está indicando {indicador_hilo}', codigo)
 
-
+    print(lista_de_mensagens)
 
 
 
