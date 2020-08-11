@@ -11,24 +11,16 @@ lista_de_mensagens = []
 
 
 def envio_de_mensagem(texto, codigo):
-    if not [item for item in lista_de_mensagens if item.startswith(codigo[:9])]:
+    if not [item for item in lista_de_mensagens if item.startswith(codigo[:8])]:
         lista_de_mensagens.append(codigo)
         print(texto)
-
-    '''
-    for valor in lista_de_mensagens:
-        if codigo[:9] in valor[:9]:
-            break
-    else:
-        lista_de_mensagens.append(codigo)
-        print(texto)
-    time.sleep(2)
-    '''
 
 
 def tratamentos(chat_id):
     #chat_id=context.job.context
     minutos_atuais = int(datetime.now().strftime('%S'))
+    if len(minutos_atuais) == 1:
+        minutos_atuais=f'0{minutos_atuais}'
     carteira_acao = pesquisar_carteira(chat_id)
     for acao in carteira_acao:
         nome_acao_da_carteira = acao[0].upper()
@@ -47,12 +39,12 @@ def tratamentos(chat_id):
             envio_de_mensagem(f'Sua Ação {nome_acao_da_carteira} está na máxima do dia', codigo)
 
         if preco_atual <= api_rest['fundamentalist_analysis']['low']:
-            codigo = f'{nome_acao_da_carteira}_low'
+            codigo = f'{nome_acao_da_carteira}_low{minutos_atuais}'
             envio_de_mensagem(f'Sua Ação {nome_acao_da_carteira} está na mínima do dia', codigo)
 
 
         if api_rest['fundamentalist_analysis']['avg_vol'] / 7 < api_rest['fundamentalist_analysis']['vol'] / horas_pasadas_do_dia(datetime.now().strftime('%H')):
-            codigo = f'{nome_acao_da_carteira}_vol{minutos_atuais}'
+            codigo = f'{nome_acao_da_carteira}_vol_{minutos_atuais}'
             envio_de_mensagem(f'O volume de sua ação {nome_acao_da_carteira} está acima do projetado', codigo)
 
 
