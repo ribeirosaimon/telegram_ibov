@@ -5,6 +5,7 @@ from telegram_bot.bot_handlers import *
 from telegram_bot.bot_handlers_del import *
 from telegram_bot.bot_handlers_carteira import *
 from telegram_bot.bot_handlers_schedule import *
+from api_crud_carteira.carteira import *
 from telegram import bot
 
 # Enable logging
