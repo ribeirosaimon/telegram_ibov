@@ -11,7 +11,7 @@ lista_de_mensagens = []
 
 
 def envio_de_mensagem(texto, codigo):
-    if not [item[:9] for item in lista_de_mensagens if item.startswith(codigo[:9])]:
+    if not [item for item in lista_de_mensagens if item.startswith(codigo[:9])]:
         lista_de_mensagens.append(codigo)
         print(texto)
 
@@ -28,7 +28,7 @@ def envio_de_mensagem(texto, codigo):
 
 def tratamentos(chat_id):
     #chat_id=context.job.context
-    minutos_atuais = int(datetime.now().strftime('%M'))
+    minutos_atuais = int(datetime.now().strftime('%S'))
     carteira_acao = pesquisar_carteira(chat_id)
     for acao in carteira_acao:
         nome_acao_da_carteira = acao[0].upper()
