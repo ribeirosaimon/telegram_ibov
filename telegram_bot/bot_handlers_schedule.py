@@ -33,7 +33,7 @@ def callback_minute(context):
     else:
         for mensagem in lista_de_mensagens:
             tempo_de_envio = abs(int(mensagem[-2:]) - int(minutos_atuais))
-            if tempo_de_envio >= 1:
+            if tempo_de_envio >= 2:
                 lista_de_mensagens.remove(mensagem)
 
 
