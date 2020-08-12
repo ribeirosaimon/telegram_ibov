@@ -11,7 +11,7 @@ del_acao = url_base +'/carteira'
 info_carteira = url_base + '/usuarios'
 
 def adicionar_acao(id_usuario, acao, preco_medio):
-    new_acao_id = str(datetime.now()).replace('-','').replace(':','').replace('.','').replace(' ','')[::-1][:10]
+    new_acao_id = str(datetime.now()).replace('-','').replace(':','').replace('.','').replace(' ','')[::-1][:6]
     endpoint = f'{criar_acao}/{new_acao_id}'
     add_acao = {'acao':f'{acao}',
                 'preco_medio':f'{preco_medio}',
