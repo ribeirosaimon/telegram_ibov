@@ -12,7 +12,7 @@ info_carteira = url_base + '/usuarios/'
 
 def adicionar_acao(id_usuario, acao, preco_medio):
     new_id = str(datetime.now()).replace('-','').replace(':','').replace('.','').replace(' ','')[::-1][:10]
-    endpoint = criar_acao +new_id + str(id_usuario)
+    endpoint = f'{criar_acao}{new_id}/{str(id_usuario)}'
     add_acao = {'acao':str(acao),
                 'preco_medio':preco_medio,
                 'usuario':int(id_usuario)
@@ -24,7 +24,7 @@ def adicionar_acao(id_usuario, acao, preco_medio):
 def deletar_acao(id_usuario, acao):
     acao = acao.lower()
     id_usuario = int(id_usuario)
-    endpoint = del_acao + str(id_usuario)
+    endpoint = f'{del_acao}/{str(id_usuario)}'
     resposta = requests.request('GET', endpoint)
     resposta_json = resposta.json()
     acao_id = resposta_json['carteira'][0]['acao_id']
@@ -34,7 +34,7 @@ def deletar_acao(id_usuario, acao):
 
 def pesquisar_carteira(id_usuario):
     lista_retorno = []
-    endpoint = info_carteira + str(id_usuario)
+    endpoint = f'{info_carteira}/{str(id_usuario)}'
     resposta = requests.request('GET', endpoint)
     carteira_json = resposta.json()
     carteira_json = carteira_json['carteira']
