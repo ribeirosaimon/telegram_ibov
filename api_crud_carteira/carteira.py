@@ -24,13 +24,16 @@ def adicionar_acao(id_usuario, acao, preco_medio):
 def deletar_acao(id_usuario, acao):
     acao = acao.lower()
     id_usuario = int(id_usuario)
-    endpoint = f'{del_acao}/{id_usuario}'
+    endpoint = f'https://api-crud-carteira-ibov.herokuapp.com/usuarios/{id_usuario}'
     resposta = requests.request('GET', endpoint)
     resposta_json = resposta.json()
-    acao_id = resposta_json['carteira'][0]['acao_id']
-    endpoint = f'{criar_acao}/{acao_id}'
-    deletar_acao = requests.request('DELETE', endpoint)
-    return deletar_acao
+    acao_id = resposta_json['carteira']
+    for resposta in acao_id:
+      if resposta['acao'] == acao:
+        acao_apagar = resposta['acao_id']
+        endpoint = f'https://api-crud-carteira-ibov.herokuapp.com/carteira/{acao_apagar}'
+        deletar_acao = requests.request('DELETE', endpoint)
+    return deletar_acao.json()
 
 def pesquisar_carteira(id_usuario):
     lista_retorno = []
