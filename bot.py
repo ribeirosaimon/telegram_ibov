@@ -1,5 +1,5 @@
 import logging
-#from token_api import KEY
+from token_api import KEY
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
 from telegram_bot.bot_handlers import *
 from telegram_bot.bot_handlers_del import *
@@ -13,7 +13,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-KEY = os.environ.get('KEY')
+#KEY = os.environ.get('KEY')
 
 def main():
     updater = Updater(KEY, use_context=True)
