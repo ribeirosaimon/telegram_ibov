@@ -45,7 +45,11 @@ def pesquisar_carteira(id_usuario):
         carteira_acao = []
         acao = index['acao']
         preco = index['preco_medio']
+        stop_gain = index['stop_gain']
+        stop_loss = index['stop_loss']
         carteira_acao.append(acao)
         carteira_acao.append(preco)
+        carteira_acao.append(stop_loss)
+        carteira_acao.append(stop_gain)
         lista_retorno.append(carteira_acao)
     return lista_retorno

@@ -5,9 +5,7 @@ import telegram
 
 ultima_referencia = []
 lista_de_mensagens = []
-
-
-
+referencia_top_ou_bot = []
 
 
 def acompanhe(update, context):
@@ -15,7 +13,6 @@ def acompanhe(update, context):
                      text="Estamos de Olho pra você")
     context.job_queue.run_repeating(callback_minute, interval=10, first=30,
                                     context=update.message.chat_id)
-
 
 
 def callback_minute(context):
@@ -40,18 +37,25 @@ def callback_minute(context):
     for acao in carteira_acao:
         nome_acao_da_carteira = acao[0].upper()
         preco_acao_da_carteira = acao[1]
+        stop_loss_carteira = acao[2]
+        stop_gain_carteira = acao[3]
         api_rest=buscar_json_da_acao(nome_acao_da_carteira)
         preco_atual = api_rest['fundamentalist_analysis']['adj_close']
         avg_vol = api_rest['fundamentalist_analysis']['avg_vol']
         vol = api_rest['fundamentalist_analysis']['vol']
         mov_avg = api_rest['technical_analysis']['mov_avg']
         ultima_referencia.append(api_rest['technical_analysis']['call_hilo'])
+        referencia_top_ou_bot.append(api_rest['technical_analysis']['reference'])
         rsi = api_rest['technical_analysis']['rsi']
 
-        if preco_acao_da_carteira <= preco_atual:
+        if stop_gain_carteira <= preco_atual:
             codigo = f'{nome_acao_da_carteira}_adj_close{minutos_atuais}'
-            envio_de_mensagem(f"Sua Ação {nome_acao_da_carteira} está com o preço maior que o indicado", codigo)
+            envio_de_mensagem(f"Sua Ação {nome_acao_da_carteira} atingiu o Stop Gain à {preco_atual}", codigo)
 
+
+        if stop_loss_carteira >= preco_atual:
+            codigo = f'{nome_acao_da_carteira}_adj_close{minutos_atuais}'
+            envio_de_mensagem(f"Sua Ação {nome_acao_da_carteira} atingiu o Stop Loss à {preco_atual}", codigo)
 
 
         if preco_atual >= api_rest['fundamentalist_analysis']['high']:
@@ -85,7 +89,6 @@ def callback_minute(context):
             envio_de_mensagem(f'Sua Ação {nome_acao_da_carteira} com o a diferença de {preco}% do ultimo {referencia}', codigo)
 
 
-
         if api_rest['technical_analysis']['call_hilo'] != ultima_referencia[-1]:
             codigo = f'{nome_acao_da_carteira}_hilo{minutos_atuais}'
             indicador_hilo = api_rest['technical_analysis']['call_hilo']
@@ -98,8 +101,19 @@ def callback_minute(context):
 
         if rsi >= 70:
             codigo = f'{nome_acao_da_carteira}_rsi{minutos_atuais}'
-            envio_de_mensagem(f'Cuidado, o RSI está em {rsi}', codigo)
+            envio_de_mensagem(f'Cuidado, o RSI está em {rsi}%', codigo)
 
         if rsi <= 30:
             codigo = f'{nome_acao_da_carteira}_rsi{minutos_atuais}'
-            envio_de_mensagem(f'O indicador RSI está em {rsi}', codigo)
+            envio_de_mensagem(f'O indicador RSI está em {rsi}%', codigo)
+
+
+        if api_rest['technical_analysis']['reference'] != referencia_top_ou_bot[-1]:
+            codigo = f'{nome_acao_da_carteira}_reference{minutos_atuais}'
+            reference = api_rest['technical_analysis']['reference']
+            if reference == 'top':
+                reference = 'Topo'
+            if reference == 'bottom':
+                reference = 'Fundo'
+            referencia_top_ou_bot.append(reference)
+            envio_de_mensagem(f'Sua Ação: {nome_acao_da_carteira} está fazendo novo {reference}', codigo)
