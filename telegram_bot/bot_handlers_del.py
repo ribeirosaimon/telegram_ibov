@@ -7,7 +7,7 @@ import threading
 import time
 
 
-STAGE1_DEL, STAGE2_DEL = range(2)
+STAGE1_DEL, STAGE2_DEL, STAGE3_DEL, STAGE4_DEL  = range(4)
 CHAT_TIMEOUT=60
 lista_acao_del = []
 
@@ -19,15 +19,27 @@ def start_del(update, context):
 
 def stage1_del(update, context):
     lista_acao_del.append(update.message.text)
-    update.message.reply_text(f'Tem certeza que quer Vender {lista_acao_del[1]}')
+    update.message.reply_text(f'Qual o Valor que Deseja vender {lista_acao_del[1]}?')
     return STAGE2_DEL
 
-
-def stage2_del(update,context):
+def stage2_del(update, context):
     lista_acao_del.append(update.message.text)
-    if lista_acao_del[2].lower() == 'sim':
+    update.message.reply_text(f'Qual a quantidade da sua venda? isso é só pra calcular o IR, caso não queira somente digite 0')
+    return STAGE3_DEL
+
+def stage3_del(update, context):
+    lista_acao_del.append(update.message.text)
+    update.message.reply_text(f'Tem certeza que deseja vender {lista_acao_del[3]} {lista_acao_del[1]} a R${lista_acao_del[2]}')
+    return STAGE4_DEL
+
+
+def stage4_del(update,context):
+    lista_acao_del.append(update.message.text)
+    retorno = pesquisar_carteira(lista_acao_del[0], lista_acao_del[1])
+    lucro = lista_acao_del[2] - #pegar o valor que ta na
+    if lista_acao_del[4].lower() == 'sim':
         deletar_acao(lista_acao_del[0],lista_acao_del[1])
-        update.message.reply_text(f'Ação {lista_acao_del[1]} deletada!')
+        update.message.reply_text(f'Ação {lista_acao_del[1]} vendida com lucro de !')
     else:
         update.message.reply_text('Beleza, qualquer coisa comece novamente')
     return ConversationHandler.END
