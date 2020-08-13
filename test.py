@@ -10,5 +10,5 @@ import time
 id_usuario = 883934505
 acao = 'movi3'
 
-retorno = pesquisar_carteira(id_usuario, acao)
+retorno = pesquisar_carteira(id_usuario)
 print(retorno)
