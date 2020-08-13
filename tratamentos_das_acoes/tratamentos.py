@@ -5,7 +5,7 @@ from api_cotacao_bolsa.pegando_cotacao import *
 from tratamentos_das_acoes.tratamento_hora_do_dia import *
 import time
 #[nome_acao, adj_close, high, low, avg_vol, vol, mov_avg, rsi]
-
+'''
 ultima_referencia = []
 lista_de_mensagens = []
 referencia_top_ou_bot = []
@@ -115,3 +115,4 @@ def tratamentos(chat_id):
             referencia_top_ou_bot.append(reference)
             envio_de_mensagem(f'Sua Ação: {nome_acao_da_carteira} está fazendo novo {reference}', codigo)
     # Conferencia se os preços estão passando em todos os indicadores, e se o codigo[:10] está funcionando
+'''
