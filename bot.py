@@ -39,6 +39,8 @@ def main():
         states={
             STAGE1_DEL: [MessageHandler(Filters.text, stage1_del)],
             STAGE2_DEL: [MessageHandler(Filters.text, stage2_del)],
+            STAGE3_DEL: [MessageHandler(Filters.text, stage3_del)],
+            STAGE4_DEL: [MessageHandler(Filters.text, stage4_del)],
             ConversationHandler.TIMEOUT: [MessageHandler(Filters.text | Filters.command, timeout)],
         },
         fallbacks=[CommandHandler('Cancel', cancel),],
