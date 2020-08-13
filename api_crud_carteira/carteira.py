@@ -28,11 +28,12 @@ def deletar_acao(id_usuario, acao):
     resposta = requests.request('GET', endpoint)
     resposta_json = resposta.json()
     acao_id = resposta_json['carteira']
-    if resposta['acao'] == acao:
-        acao_apagar = resposta['acao_id']
-        endpoint = f'{del_acao}/{acao_apagar}'
-        deletar_acao = requests.request('DELETE', endpoint)
-    return id_usuario
+    for retorno in acao_id:
+        if retorno['acao'] == acao:
+            acao_apagar = retorno['acao_id']
+            endpoint = f'{del_acao}/{acao_apagar}'
+            deletar_acao = requests.request('DELETE', endpoint)
+    return acao
 
 def pesquisar_carteira(id_usuario):
     lista_retorno = []
