@@ -22,7 +22,7 @@ def adicionar_acao(id_usuario, acao, preco_medio, stop_loss, stop_gain):
 
 
 def deletar_acao(id_usuario, acao):
-    acao = acao.lower()
+    acao = acao
     id_usuario = int(id_usuario)
     endpoint = f'{info_carteira}/{id_usuario}'
     resposta = requests.request('GET', endpoint)

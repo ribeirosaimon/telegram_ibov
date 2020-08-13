@@ -34,18 +34,21 @@ def stage3_del(update, context):
 
 
 def stage4_del(update,context):
+    preco_medio = 0
     lista_acao_del.append(update.message.text)
     retorno = pesquisar_carteira(lista_acao_del[0])
     for acao in retorno:
         if acao[0] == lista_acao_del[1]:
             preco_medio = acao[1]
-    lucro = lista_acao_del[2] - preco_medio
-    imposto_de_renda = float(lucro * 0.15)
+    lucro_por_acao = float(lista_acao_del[2] ) - float(preco_medio)
+    lucro = float(lucro_por_acao) * float(lista_acao_del[3])
+    imposto_de_renda = round(lucro * 0.15, 2)
     if lista_acao_del[4].lower() == 'sim':
         deletar_acao(lista_acao_del[0],lista_acao_del[1])
-        update.message.reply_text(f'Ação {lista_acao_del[1]} vendida com lucro de R${lucro}, seu IR é de {imposto_de_renda}')
+        update.message.reply_text(f'Ação {lista_acao_del[1]} vendida com lucro de R${round(lucro,2)}, seu IR é de {imposto_de_renda}')
     else:
         update.message.reply_text('Beleza, qualquer coisa comece novamente')
+    del(lista_acao_del[:])
     return ConversationHandler.END
 
 
