@@ -36,7 +36,8 @@ def stage3_del(update, context):
 def stage4_del(update,context):
     lista_acao_del.append(update.message.text)
     retorno = pesquisar_carteira(lista_acao_del[0], lista_acao_del[1])
-    lucro = lista_acao_del[2] - #pegar o valor que ta na
+    print(retorno)
+    lucro = lista_acao_del[2] - 0#pegar o valor que ta na
     if lista_acao_del[4].lower() == 'sim':
         deletar_acao(lista_acao_del[0],lista_acao_del[1])
         update.message.reply_text(f'Ação {lista_acao_del[1]} vendida com lucro de !')

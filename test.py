@@ -10,6 +10,5 @@ import time
 id_usuario = 883934505
 acao = 'movi3'
 
-while True:
-    tratamentos(id_usuario)
-    time.sleep(10)
+retorno = pesquisar_carteira(id_usuario, acao)
+print(retorno)
