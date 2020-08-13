@@ -25,6 +25,8 @@ def main():
         states={
             STAGE1: [MessageHandler(Filters.text, stage1)],
             STAGE2: [MessageHandler(Filters.text, stage2)],
+            STAGE3: [MessageHandler(Filters.text, stage3)],
+            STAGE4: [MessageHandler(Filters.text, stage4)],
             ConversationHandler.TIMEOUT: [MessageHandler(Filters.text | Filters.command, timeout)],
         },
         fallbacks=[CommandHandler('Cancel', cancel),],
@@ -36,13 +38,14 @@ def main():
         entry_points=[CommandHandler('Deletar', start_del)],
         states={
             STAGE1_DEL: [MessageHandler(Filters.text, stage1_del)],
+            STAGE2_DEL: [MessageHandler(Filters.text, stage2_del)],
             ConversationHandler.TIMEOUT: [MessageHandler(Filters.text | Filters.command, timeout)],
         },
         fallbacks=[CommandHandler('Cancel', cancel),],
         conversation_timeout=CHAT_TIMEOUT
     )
     dp.add_handler(conv_handler_del)
-    dp.add_handler(CommandHandler("acompanhe",acompanhe, pass_job_queue=True))
+    dp.add_handler(CommandHandler("Acompanhe",acompanhe, pass_job_queue=True))
     dp.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
     updater.start_polling()
     updater.idle()

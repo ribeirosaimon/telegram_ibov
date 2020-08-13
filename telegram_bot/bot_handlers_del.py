@@ -7,7 +7,7 @@ import threading
 import time
 
 
-STAGE1_DEL = range(1)
+STAGE1_DEL, STAGE2_DEL = range(2)
 CHAT_TIMEOUT=60
 lista_acao_del = []
 
@@ -17,17 +17,21 @@ def start_del(update, context):
     lista_acao_del.append(update.message.chat.id)
     return STAGE1_DEL
 
-
-
-
-def stage1_del(update,context):
+def stage1_del(update, context):
     lista_acao_del.append(update.message.text)
-    deletar_acao(lista_acao_del[0],lista_acao_del[1])
-    update.message.reply_text('Ação deletada!')
+    update.message.reply_text(f'Tem certeza que quer Vender {lista_acao_del[1]}')
+    return STAGE2_DEL
+
+
+def stage2_del(update,context):
+    lista_acao_del.append(update.message.text)
+    if lista_acao_del[2].lower() == 'sim':
+        deletar_acao(lista_acao_del[0],lista_acao_del[1])
+        update.message.reply_text(f'Ação {lista_acao_del[1]} deletada!')
+    else:
+        update.message.reply_text('Beleza, qualquer coisa comece novamente')
     return ConversationHandler.END
 
-def cancel():
-    update.message.reply_text('Comando Cancelado')
 
 def timeout(update, context):
    update.message.reply_text('Ta beleza então, Abraços')
