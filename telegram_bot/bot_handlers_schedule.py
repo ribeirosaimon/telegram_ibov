@@ -9,11 +9,15 @@ referencia_top_ou_bot = []
 
 
 def acompanhe(update, context):
-    context.bot.send_message(chat_id=update.message.chat_id,
-                     text="Estamos de Olho pra você")
-    context.job_queue.run_repeating(callback_minute, interval=10, first=30,
+    horario_atual = int(datetime.now().strftime('%H'))
+    if horario_atual <= 17:
+        context.bot.send_message(chat_id=update.message.chat_id,
+                         text="Estamos de Olho pra você")
+        context.job_queue.run_repeating(callback_minute, interval=300, first=10,
                                     context=update.message.chat_id)
-
+    else:
+        context.bot.send_message(chat_id=update.message.chat_id,
+                         text="Fora do Horario do Pregão ")
 
 def callback_minute(context):
     def envio_de_mensagem(texto, codigo):
