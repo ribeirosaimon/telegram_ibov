@@ -21,7 +21,7 @@ def acompanhe(update, context):
 '''
 def acompanhe(update, context):
     horario_atual = int(datetime.now().strftime('%H'))
-    if horario_atual >= 17:
+    if horario_atual < 18:
         context.bot.send_message(chat_id=update.message.chat_id, text="Estamos de Olho pra você")
         acompanhe_sms = context.job_queue.run_repeating(callback_minute, interval=30, first=0,context=update.message.chat_id, name='my_job')
     else:
@@ -31,9 +31,9 @@ def acompanhe(update, context):
 
 def callback_minute(context: telegram.ext.CallbackContext):
     chat_id=context.job.context
-    horario_atual = int(datetime.now().strftime('%M'))
+    horario_atual = int(datetime.now().strftime('%H'))
     job = context.job
-    if horario_atual > 57:
+    if horario_atual >= 18:
         job.schedule_removal()
         context.bot.send_message(chat_id=chat_id,text='Bom por hoje é só!')
 
