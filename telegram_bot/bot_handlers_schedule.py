@@ -5,25 +5,13 @@ import telegram
 ultima_referencia = []
 lista_de_mensagens = []
 referencia_top_ou_bot = []
-'''
 
-def acompanhe(update, context):
-    horario_atual = int(datetime.now().strftime('%H'))
-#    if horario_atual <= 17:
-    context.bot.send_message(chat_id=update.message.chat_id,
-                     text="Estamos de Olho pra você")
-    context.job_queue.run_daily(callback_minute, time=time(hour=21, minute=17, seconds=0), days=(0, 1, 2, 3, 4, 5, 6), context=update.message.chat_id)
-    #else:
-    #    context.bot.send_message(chat_id=update.message.chat_id,
-    #                     text="Fora do Horario do Pregão ")
-
-
-'''
 def acompanhe(update, context):
     horario_atual = int(datetime.now().strftime('%H'))
     if horario_atual < 18:
         context.bot.send_message(chat_id=update.message.chat_id, text="Estamos de Olho pra você")
-        acompanhe_sms = context.job_queue.run_repeating(callback_minute, interval=30, first=0,context=update.message.chat_id, name='my_job')
+        #acompanhe_sms = context.job_queue.run_repeating(callback_minute, interval=30, first=0,context=update.message.chat_id, name='my_job')
+        acompanhe_sms = context.job_queue.run_daily(callback_minute, time:time(hour=10, minute=30),days=(0,1,2,3,4,5,6),context=update.message.chat_id, name='my_job')
     else:
         context.bot.send_message(chat_id=update.message.chat_id,
                          text="Fora do Horario do Pregão ")
@@ -32,6 +20,7 @@ def acompanhe(update, context):
 def callback_minute(context: telegram.ext.CallbackContext):
     chat_id=context.job.context
     horario_atual = int(datetime.now().strftime('%H'))
+    minutos_da_abertura = int(datetime.now().strftime('%M'))
     job = context.job
     if horario_atual >= 18:
         job.schedule_removal()
