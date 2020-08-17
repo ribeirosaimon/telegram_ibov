@@ -1,31 +1,48 @@
-from telegram.ext import Updater,CommandHandler
-from telegram.ext import  MessageHandler,Filters,InlineQueryHandler
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, InlineQueryHandler
 from tratamentos_das_acoes.tratamentos import *
 import telegram
 
 ultima_referencia = []
 lista_de_mensagens = []
 referencia_top_ou_bot = []
-
+'''
 
 def acompanhe(update, context):
     horario_atual = int(datetime.now().strftime('%H'))
-    if horario_atual <= 17:
-        context.bot.send_message(chat_id=update.message.chat_id,
-                         text="Estamos de Olho pra você")
-        context.job_queue.run_repeating(callback_minute, interval=300, first=10,
-                                    context=update.message.chat_id)
+#    if horario_atual <= 17:
+    context.bot.send_message(chat_id=update.message.chat_id,
+                     text="Estamos de Olho pra você")
+    context.job_queue.run_daily(callback_minute, time=time(hour=21, minute=17, seconds=0), days=(0, 1, 2, 3, 4, 5, 6), context=update.message.chat_id)
+    #else:
+    #    context.bot.send_message(chat_id=update.message.chat_id,
+    #                     text="Fora do Horario do Pregão ")
+
+
+'''
+def acompanhe(update, context):
+    horario_atual = int(datetime.now().strftime('%H'))
+    if horario_atual >= 17:
+        context.bot.send_message(chat_id=update.message.chat_id, text="Estamos de Olho pra você")
+        acompanhe_sms = context.job_queue.run_repeating(callback_minute, interval=30, first=0,context=update.message.chat_id, name='my_job')
     else:
         context.bot.send_message(chat_id=update.message.chat_id,
                          text="Fora do Horario do Pregão ")
 
-def callback_minute(context):
+
+def callback_minute(context: telegram.ext.CallbackContext):
+    chat_id=context.job.context
+    horario_atual = int(datetime.now().strftime('%M'))
+    job = context.job
+    if horario_atual > 57:
+        job.schedule_removal()
+        context.bot.send_message(chat_id=chat_id,text='Bom por hoje é só!')
+
     def envio_de_mensagem(texto, codigo):
         if not [item for item in lista_de_mensagens if item.startswith(codigo[:8])]:
             lista_de_mensagens.append(codigo)
             context.bot.send_message(chat_id=chat_id,text=texto)
 
-    chat_id=context.job.context
+
     minutos_atuais = datetime.now().strftime('%H')
     carteira_acao = pesquisar_carteira(chat_id)
 
@@ -34,7 +51,7 @@ def callback_minute(context):
     else:
         for mensagem in lista_de_mensagens:
             tempo_de_envio = abs(int(mensagem[-2:]) - int(minutos_atuais))
-            if tempo_de_envio >= 2:
+            if tempo_de_envio > 2:
                 lista_de_mensagens.remove(mensagem)
 
 
