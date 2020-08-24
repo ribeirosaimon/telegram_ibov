@@ -81,8 +81,9 @@ def callback_minute(context: telegram.ext.CallbackContext):
 
 
             if avg_vol / 7 < vol / horas_pasadas_do_dia(datetime.now().strftime('%H')):
-                codigo = f'{nome_acao_da_carteira}_vol_{minutos_atuais}'
-                envio_de_mensagem(f'O volume de sua ação {nome_acao_da_carteira} está acima do projetado, o volume atual é de {vol} e a media de volume nos ultimos 60 dias é de {avg_vol}', codigo)
+                if avg_vol != 0:
+                    codigo = f'{nome_acao_da_carteira}_vol_{minutos_atuais}'
+                    envio_de_mensagem(f'O volume de sua ação {nome_acao_da_carteira} está acima do projetado, o volume atual é de {vol} e a media de volume nos ultimos 60 dias é de {avg_vol}', codigo)
 
 
             if mov_avg >= preco_atual:
